@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YURI MANUTENÇÕES | Ordem de Serviço</title>
+    <meta name="theme-color" content="#1f5f9f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="YURI MANUTENÇÕES" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="auth-locked">
+    <section class="login-gate" aria-label="Login do sistema">
+      <form class="auth-card" id="auth-form">
+        <span class="brand-mark large" aria-hidden="true"><span></span></span>
+        <div>
+          <p class="eyebrow">Acesso seguro</p>
+          <h1>YURI MANUTENÇÕES</h1>
+          <p class="muted">Entre como administrador, técnico ou cliente.</p>
+        </div>
+
+        <label class="field">Perfil
+          <select id="login-role">
+            <option value="admin">Administrador</option>
+            <option value="tech">Técnico</option>
+            <option value="client">Cliente</option>
+          </select>
+        </label>
+        <label class="field">Usuário ou e-mail
+          <input id="login-email" type="text" placeholder="seu usuário" autocomplete="username" />
+        </label>
+        <label class="field">Senha
+          <input id="login-password" type="password" placeholder="Sua senha" autocomplete="current-password" />
+        </label>
+        <p class="login-error" id="login-error" role="alert"></p>
+        <button class="primary-btn full" type="submit">Entrar no sistema</button>
+        <button class="secondary-btn full" data-action="install-pwa" type="button">Instalar app</button>
+      </form>
+    </section>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="YURI MANUTENÇÕES">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span>
+          </span>
+          <span>
+            <strong>YURI MANUTENÇÕES</strong>
+            <small>Soluções em Refrigeração e Climatização</small>
+          </span>
+        </a>
+        <nav class="mode-tabs" aria-label="Áreas do aplicativo">
+          <button class="mode-tab active" data-mode="admin">Painel Web</button>
+          <button class="mode-tab" data-mode="client">Área do Cliente</button>
+          <button class="mode-tab" data-mode="tech">Área do Técnico</button>
+        </nav>
+        <div class="session-chip">
+          <span id="session-user">Usuário</span>
+          <button class="ghost-btn" id="logout-btn" type="button">Sair</button>
+        </div>
+        <button class="icon-btn theme-toggle" title="Alternar contraste" aria-label="Alternar contraste">
+          <span>◐</span>
+        </button>
+      </header>
+
+      <main>
+        <section id="admin" class="mode-view active" aria-label="Painel administrativo">
+          <aside class="sidebar">
+            <div class="sidebar-brand">
+              <span class="brand-mark small" aria-hidden="true"><span></span></span>
+              <strong>YURI MANUTENÇÕES</strong>
+            </div>
+            <button class="side-link active" data-section="dashboard">Dashboard</button>
+            <button class="side-link" data-section="tickets">Chamados</button>
+            <button class="side-link" data-section="orders">Ordem de Serviço</button>
+            <button class="side-link" data-section="clients">Clientes</button>
+            <button class="side-link" data-section="technicians">Técnicos</button>
+            <button class="side-link" data-section="agenda">Agenda</button>
+            <button class="side-link" data-section="reports">Relatórios</button>
+          </aside>
+
+          <div class="admin-workspace">
+            <div class="workspace-bar">
+              <div>
+                <p class="eyebrow">Painel administrativo</p>
+                <h1 id="workspace-title">Dashboard</h1>
+              </div>
+              <label class="search">
+                <span>⌕</span>
+                <input id="global-search" type="search" placeholder="Buscar cliente, OS ou técnico" />
+              </label>
+              <button class="primary-btn" id="new-ticket-btn">+ Novo Chamado</button>
+            </div>
+
+            <section class="admin-section active" id="dashboard-section">
+              <div class="metric-grid">
+                <article class="metric">
+                  <span>Chamados abertos</span>
+                  <strong>32</strong>
+                  <small>+8% nesta semana</small>
+                </article>
+                <article class="metric">
+                  <span>Em andamento</span>
+                  <strong>18</strong>
+                  <small>6 visitas hoje</small>
+                </article>
+                <article class="metric">
+                  <span>Concluídos hoje</span>
+                  <strong>15</strong>
+                  <small>Meta diária 20</small>
+                </article>
+                <article class="metric money">
+                  <span>Faturamento do mês</span>
+                  <strong>R$ 45.780</strong>
+                  <small>Ticket médio R$ 314</small>
+                </article>
+              </div>
+
+              <div class="dashboard-grid">
+                <article class="panel chart-panel">
+                  <div class="panel-title">
+                    <h2>Chamados por status</h2>
+                    <button class="ghost-btn">Exportar</button>
+                  </div>
+                  <div class="donut-wrap">
+                    <div class="donut" aria-label="Gráfico de status"></div>
+                    <ul class="legend">
+                      <li><i class="green"></i>Abertos</li>
+                      <li><i class="blue"></i>Em andamento</li>
+                      <li><i class="gray"></i>Aguardando peça</li>
+                      <li><i class="red"></i>Cancelados</li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="panel">
+                  <div class="panel-title">
+                    <h2>Atendimentos de hoje</h2>
+                    <a href="#" class="text-link">Agenda completa</a>
+                  </div>
+                  <div id="today-list" class="timeline"></div>
+                </article>
+                <article class="panel wide">
+                  <div class="panel-title">
+                    <h2>Fila operacional</h2>
+                    <span class="pill blue">Tempo médio: 2h 18min</span>
+                  </div>
+                  <div id="ticket-kanban" class="kanban"></div>
+                </article>
+              </div>
+            </section>
+
+            <section class="admin-section" id="tickets-section">
+              <div class="table-toolbar">
+                <div class="segmented">
+                  <button class="active" data-filter="Todos">Todos</button>
+                  <button data-filter="Aberto">Abertos</button>
+                  <button data-filter="Em andamento">Em andamento</button>
+                  <button data-filter="Concluído">Concluídos</button>
+                </div>
+              </div>
+              <div class="table-card">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Protocolo</th>
+                      <th>Cliente</th>
+                      <th>Prioridade</th>
+                      <th>Status</th>
+                      <th>Técnico</th>
+                      <th>Data</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tickets-table"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="admin-section" id="orders-section">
+              <div class="order-layout">
+                <article class="panel order-main">
+                  <div class="panel-title">
+                    <div>
+                      <p class="eyebrow">OS #2024-0012</p>
+                      <h2>Manutenção de ar-condicionado</h2>
+                    </div>
+                    <span class="pill green">Em andamento</span>
+                  </div>
+                  <div class="order-tabs">
+                    <button class="active" data-order-tab="geral">Geral</button>
+                    <button data-order-tab="materiais">Materiais</button>
+                    <button data-order-tab="fotos">Fotos</button>
+                    <button data-order-tab="assinatura">Assinatura</button>
+                    <button data-order-tab="historico">Histórico</button>
+                  </div>
+                  <div id="order-content"></div>
+                </article>
+                <article class="panel totals">
+                  <h2>Resumo financeiro</h2>
+                  <dl>
+                    <dt>Serviço</dt><dd>R$ 150,00</dd>
+                    <dt>Peças</dt><dd>R$ 320,00</dd>
+                    <dt>Desconto</dt><dd>R$ 0,00</dd>
+                    <dt>Total</dt><dd>R$ 470,00</dd>
+                  </dl>
+                  <button class="primary-btn full" data-action="download-pdf">Gerar PDF</button>
+                  <button class="whatsapp full" data-action="send-whatsapp">Enviar WhatsApp</button>
+                </article>
+              </div>
+            </section>
+
+            <section class="admin-section" id="clients-section">
+              <article class="panel tech-manager">
+                <div class="panel-title">
+                  <h2>Adicionar cliente</h2>
+                  <span class="pill blue">Cadastro</span>
+                </div>
+                <div class="tech-form">
+                  <label class="field">Nome
+                    <input id="client-name" placeholder="Nome do cliente" />
+                  </label>
+                  <label class="field">Telefone
+                    <input id="client-phone" placeholder="(11) 90000-0000" />
+                  </label>
+                  <label class="field">Cidade
+                    <input id="client-city" placeholder="Cidade" />
+                  </label>
+                  <button class="primary-btn" data-action="add-client" type="button">Adicionar cliente</button>
+                </div>
+                <p class="form-status" id="client-manager-status" role="status"></p>
+              </article>
+              <div class="table-card compact">
+                <table>
+                  <thead><tr><th>Nome</th><th>Telefone</th><th>Cidade</th><th>Última OS</th><th>Ações</th></tr></thead>
+                  <tbody id="clients-table"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="admin-section" id="technicians-section">
+              <article class="panel tech-manager">
+                <div class="panel-title">
+                  <h2>Adicionar técnico</h2>
+                  <span class="pill blue">Equipe</span>
+                </div>
+                <div class="tech-form">
+                  <label class="field">Nome
+                    <input id="tech-name" placeholder="Nome do técnico" />
+                  </label>
+                  <label class="field">Telefone
+                    <input id="tech-phone" placeholder="(11) 90000-0000" />
+                  </label>
+                  <label class="field">Status
+                    <select id="tech-status">
+                      <option>Disponível</option>
+                      <option>Em atendimento</option>
+                      <option>Em deslocamento</option>
+                      <option>Indisponível</option>
+                    </select>
+                  </label>
+                  <button class="primary-btn" data-action="add-technician" type="button">Adicionar técnico</button>
+                </div>
+                <p class="form-status" id="tech-manager-status" role="status"></p>
+              </article>
+              <div id="tech-grid" class="people-grid"></div>
+            </section>
+
+            <section class="admin-section" id="agenda-section">
+              <div class="agenda-board">
+                <div class="agenda-header">
+                  <button class="ghost-btn">Hoje</button>
+                  <h2>20 de Maio de 2024</h2>
+                  <select aria-label="Visualização da agenda"><option>Dia</option><option>Semana</option></select>
+                </div>
+                <div id="agenda-list" class="agenda-list"></div>
+              </div>
+            </section>
+
+            <section class="admin-section" id="reports-section">
+              <div class="reports">
+                <article class="panel">
+                  <label class="field">Período
+                    <select><option>01/05/2024 - 31/05/2024</option><option>Últimos 7 dias</option></select>
+                  </label>
+                  <div class="metric-row">
+                    <span><b>125</b>Total de chamados</span>
+                    <span><b>89</b>Concluídos</span>
+                    <span><b>R$ 45.780</b>Faturamento</span>
+                  </div>
+                  <div class="line-chart" aria-label="Gráfico de faturamento por dia">
+                    <i style="height:44%"></i><i style="height:66%"></i><i style="height:78%"></i><i style="height:84%"></i>
+                    <i style="height:48%"></i><i style="height:56%"></i><i style="height:72%"></i><i style="height:38%"></i><i style="height:61%"></i>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section id="client" class="mode-view client-portal" aria-label="Área do cliente">
+          <div class="client-hero">
+            <div>
+              <p class="eyebrow">Área do cliente</p>
+              <h1>Olá, João Silva</h1>
+              <p class="muted">Acompanhe seus chamados, abra solicitações e consulte ordens de serviço.</p>
+            </div>
+            <button class="primary-btn" data-action="focus-client-ticket" type="button">Abrir novo chamado</button>
+          </div>
+
+          <div class="metric-grid client-metrics">
+            <article class="metric">
+              <span>Chamados abertos</span>
+              <strong>2</strong>
+              <small>1 com técnico atribuído</small>
+            </article>
+            <article class="metric">
+              <span>Em atendimento</span>
+              <strong>1</strong>
+              <small>Previsão: hoje às 14:30</small>
+            </article>
+            <article class="metric">
+              <span>Concluídos</span>
+              <strong>5</strong>
+              <small>Histórico disponível</small>
+            </article>
+            <article class="metric money">
+              <span>Solicitações</span>
+              <strong>Online</strong>
+              <small>Acompanhe pelo status</small>
+            </article>
+          </div>
+
+          <div class="client-grid">
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Meus chamados</h2>
+                <span class="pill blue">Atualizado agora</span>
+              </div>
+              <div id="client-portal-cards" class="client-ticket-list"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Novo chamado</h2>
+              </div>
+              <div class="client-form">
+                <label class="field">Tipo de serviço
+                  <select><option>Manutenção de ar-condicionado</option><option>Instalação de split</option><option>Higienização</option></select>
+                </label>
+                <label class="field">Descrição
+                  <textarea placeholder="Descreva o problema"></textarea>
+                </label>
+                <label class="field">Endereço
+                  <input value="Rua das Flores, 123" />
+                </label>
+                <button class="photo-upload">Adicionar fotos</button>
+                <button class="primary-btn full" data-action="create-client-ticket" type="button">Enviar chamado</button>
+                <p class="form-status" id="client-ticket-status" role="status"></p>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Avaliar atendimento</h2>
+              </div>
+              <p class="muted">Conte como foi o serviço concluído.</p>
+              <div class="stars" data-stars><button>★</button><button>★</button><button>★</button><button>★</button><button>★</button></div>
+              <textarea placeholder="Escreva aqui..."></textarea>
+              <button class="primary-btn full">Enviar avaliação</button>
+            </article>
+          </div>
+          <div class="phone-grid">
+            <article class="phone">
+              <div class="phone-screen login-screen">
+                <span class="brand-mark large" aria-hidden="true"><span></span></span>
+                <h2>YURI MANUTENÇÕES</h2>
+                <p>Bem-vindo!</p>
+                <input placeholder="E-mail" />
+                <input placeholder="Senha" type="password" />
+                <button class="primary-btn full">Entrar</button>
+                <a>Cadastre-se</a>
+              </div>
+            </article>
+            <article class="phone">
+              <div class="phone-screen">
+                <h2>Olá, João!</h2>
+                <p class="muted">Acompanhe seus chamados</p>
+                <div class="mobile-metrics">
+                  <span><b>2</b>Abertos</span><span><b>1</b>Em andamento</span><span><b>5</b>Concluídos</span>
+                </div>
+                <h3>Meus chamados</h3>
+                <div id="client-cards"></div>
+                <nav class="mobile-nav"><b>⌂</b><b>▢</b><b>＋</b><b>☰</b><b>○</b></nav>
+              </div>
+            </article>
+            <article class="phone">
+              <div class="phone-screen">
+                <h2>Novo chamado</h2>
+                <label class="field">Categoria<select><option>Manutenção</option><option>Instalação</option></select></label>
+                <label class="field">Descrição<textarea placeholder="Descreva o problema"></textarea></label>
+                <button class="photo-upload">▧ Adicionar fotos</button>
+                <label class="field">Endereço<input value="Rua das Flores, 123" /></label>
+                <button class="primary-btn full">Enviar chamado</button>
+              </div>
+            </article>
+            <article class="phone">
+              <div class="phone-screen">
+                <h2>Detalhes do chamado</h2>
+                <span class="pill blue">Em andamento</span>
+                <div class="mobile-timeline">
+                  <p><i></i>Chamado aberto</p>
+                  <p><i></i>Atribuído ao técnico Carlos</p>
+                  <p><i></i>Previsão de chegada 14:30</p>
+                </div>
+                <h3>Detalhes</h3>
+                <p>Manutenção de ar-condicionado</p>
+                <button class="secondary-btn full">Ver ordem de serviço</button>
+              </div>
+            </article>
+            <article class="phone">
+              <div class="phone-screen">
+                <h2>Avaliação</h2>
+                <p>Avalie seu atendimento</p>
+                <div class="stars" data-stars><button>★</button><button>★</button><button>★</button><button>★</button><button>★</button></div>
+                <textarea placeholder="Escreva aqui..."></textarea>
+                <button class="primary-btn full">Enviar avaliação</button>
+              </div>
+            </article>
+            <article class="phone">
+              <div class="phone-screen">
+                <h2>#2024-0012</h2>
+                <span class="pill green">Concluído</span>
+                <dl class="mobile-dl"><dt>Técnico</dt><dd>Carlos Eduardo</dd><dt>Valor total</dt><dd>R$ 470,00</dd></dl>
+                <button class="primary-btn full" data-action="download-pdf">Baixar PDF</button>
+                <button class="whatsapp full" data-action="send-whatsapp">Enviar por WhatsApp</button>
+                <nav class="mobile-nav"><b>⌂</b><b>▢</b><b>☰</b><b>▣</b><b>○</b></nav>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="tech" class="mode-view tech-portal" aria-label="Área do técnico">
+          <div class="client-hero">
+            <div>
+              <p class="eyebrow">Área do técnico</p>
+              <h1>Olá, Carlos Eduardo</h1>
+              <p class="muted">Veja sua agenda, chamados atribuídos e finalize ordens de serviço em campo.</p>
+            </div>
+            <button class="primary-btn" data-action="focus-tech-os" type="button">Abrir OS atual</button>
+          </div>
+
+          <div class="metric-grid client-metrics">
+            <article class="metric">
+              <span>Atendimentos hoje</span>
+              <strong>3</strong>
+              <small>Próximo às 14:30</small>
+            </article>
+            <article class="metric">
+              <span>Em andamento</span>
+              <strong>1</strong>
+              <small>OS #2024-0012</small>
+            </article>
+            <article class="metric">
+              <span>Concluídos</span>
+              <strong>5</strong>
+              <small>Na semana</small>
+            </article>
+            <article class="metric money">
+              <span>Peças usadas</span>
+              <strong>R$ 320</strong>
+              <small>Hoje</small>
+            </article>
+          </div>
+
+          <div class="tech-grid">
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Próximos atendimentos</h2>
+                <span class="pill blue">Hoje</span>
+              </div>
+              <div id="tech-agenda"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Chamados atribuídos</h2>
+              </div>
+              <div id="tech-calls"></div>
+            </article>
+
+            <article class="panel tech-os-panel" id="tech-current-os">
+              <div class="panel-title">
+                <div>
+                  <p class="eyebrow" id="tech-os-id">OS #2024-0012</p>
+                  <h2 id="tech-os-title">Manutenção de ar-condicionado</h2>
+                </div>
+                <span class="pill blue" id="tech-os-status-pill">Em andamento</span>
+              </div>
+              <h3>Diagnóstico</h3>
+              <p class="muted" id="tech-os-diagnosis">Capacitor da condensadora danificado e serpentina com sujeira.</p>
+              <h3>Serviço realizado</h3>
+              <textarea id="tech-work-notes">Substituição do capacitor, limpeza da serpentina e testes realizados.</textarea>
+              <div class="info-grid">
+                <label class="field">Material
+                  <input value="Capacitor da condensadora" />
+                </label>
+                <label class="field">Quantidade
+                  <input type="number" value="1" />
+                </label>
+              </div>
+              <button class="primary-btn full" data-action="finish-tech-service" type="button">Finalizar serviço</button>
+              <p class="form-status" id="tech-service-status" role="status"></p>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Fotos da OS</h2>
+              </div>
+              <div class="photo-grid" id="tech-photo-grid">
+                <span class="photo p1"></span><span class="photo p2"></span><span class="photo p3"></span><span class="photo p4"></span>
+              </div>
+              <input id="tech-photo-input" type="file" accept="image/*" multiple hidden />
+              <button class="photo-upload" data-action="upload-tech-photos" type="button">Adicionar foto</button>
+              <p class="form-status" id="tech-photo-status" role="status"></p>
+            </article>
+
+            <article class="panel">
+              <div class="panel-title">
+                <h2>Assinatura do cliente</h2>
+              </div>
+              <p class="muted">João Silva</p>
+              <canvas id="signature" width="420" height="220" aria-label="Campo de assinatura"></canvas>
+              <div class="button-row"><button class="ghost-btn" id="clear-signature" type="button">Limpar</button><button class="primary-btn" type="button">Concluir</button></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="ticket-modal">
+      <form method="dialog" class="modal-card">
+        <div class="panel-title">
+          <h2>Novo chamado</h2>
+          <button class="icon-btn" type="submit" aria-label="Fechar">×</button>
+        </div>
+        <label class="field">Cliente<input value="João Silva" /></label>
+        <label class="field">Tipo de serviço<select><option>Manutenção de ar-condicionado</option><option>Vazamento de fluido refrigerante</option><option>Instalação de split</option></select></label>
+        <label class="field">Prioridade<select><option>Alta</option><option>Média</option><option>Baixa</option></select></label>
+        <label class="field">Descrição<textarea>Cliente relata que o equipamento não está refrigerando.</textarea></label>
+        <button class="primary-btn full" value="confirm" type="submit">Criar chamado</button>
+      </form>
+    </dialog>
+
+    <dialog id="ticket-detail-modal">
+      <form method="dialog" class="modal-card">
+        <div class="panel-title">
+          <h2 id="ticket-detail-title">Detalhes da OS</h2>
+          <button class="icon-btn" type="submit" aria-label="Fechar">×</button>
+        </div>
+        <div id="ticket-detail-body"></div>
+        <button class="primary-btn full" type="submit">Fechar</button>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
