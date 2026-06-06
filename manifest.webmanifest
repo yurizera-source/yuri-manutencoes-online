@@ -1,0 +1,20 @@
+{
+  "name": "YURI MANUTENÇÕES",
+  "short_name": "Yuri OS",
+  "description": "Sistema de chamados, ordens de serviço e técnicos para manutenção em refrigeração.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f7f6",
+  "theme_color": "#1f5f9f",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
